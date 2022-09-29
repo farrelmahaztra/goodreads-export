@@ -51,11 +51,11 @@ def enhance_row(row):
     cover_id = get_cover_id(book)
 
     if olid:
-      row["Open Library Link"] = f"https://openlibrary.org/works/{olid}"
-      row["Cover Image"] = f"https://covers.openlibrary.org/b/olid/{olid}-M.jpg?default=false"
+        row["Open Library Link"] = f"https://openlibrary.org/works/{olid}"
+        row["Cover Image"] = f"https://covers.openlibrary.org/b/olid/{olid}-M.jpg?default=false"
 
     if cover_id:
-      row["Cover Image"] = f"https://covers.openlibrary.org/b/id/{cover_id}-M.jpg?default=false"
+        row["Cover Image"] = f"https://covers.openlibrary.org/b/id/{cover_id}-M.jpg?default=false"
 
     return row
 
