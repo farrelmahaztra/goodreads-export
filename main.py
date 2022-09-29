@@ -33,11 +33,11 @@ def csv_to_json(filepath, filter_keys=[]):
 
             if (row["ISBN"] != ""):
                 row["Open Library Link"] = f"https://openlibrary.org/isbn/{row['ISBN']}"
-                row["Cover Image"] = f"https://covers.openlibrary.org/b/isbn/{row['ISBN']}-M.jpg"
+                row["Cover Image"] = f"https://covers.openlibrary.org/b/isbn/{row['ISBN']}-M.jpg?default=false"
             else:
                 olid = get_olid(row["Title"], row["Author"])
-                row["Open Library Link"] = f"https://openlibrary.org/works/{olid}"
-                row["Cover Image"] = f"https://covers.openlibrary.org/b/olid/{olid}-M.jpg"
+                row["Open Library Link"] = f"https://openlibrary.org/works/{olid}" if olid else ""
+                row["Cover Image"] = f"https://covers.openlibrary.org/b/olid/{olid}-M.jpg?default=false" if olid else ""
 
             if (len(filter_keys)):
                 parsed.append({
