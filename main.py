@@ -15,8 +15,10 @@ def csv_to_json(filepath):
       row["ISBN13"] = row["ISBN13"][2:-1]
 
       if (row["ISBN"] != ""):
+        row["Open Library Link"] = f"https://openlibrary.org/isbn/{row['ISBN']}"
         row["Cover Image"] = f"https://covers.openlibrary.org/b/isbn/{row['ISBN']}-M.jpg" 
       else:
+        row["Open Library Link"] = ""
         row["Cover Image"] = ""
        
       parsed.append(row)
