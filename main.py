@@ -11,6 +11,9 @@ def csv_to_json(filepath):
     reader = csv.DictReader(export_csv)
 
     for row in reader:
+      row["ISBN"] = row["ISBN"][2:-1]
+      row["ISBN13"] = row["ISBN13"][2:-1]
+
       parsed.append(row)
 
   return parsed
