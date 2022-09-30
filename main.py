@@ -4,11 +4,12 @@ import requests
 
 csv_path = "export.csv"
 json_path = "export.json"
-
+ol_domain = "https://openlibrary.org"
+ol_covers_domain = "https://covers.openlibrary.org"
 
 def search_book(title, author):
     response = requests.get(
-        f"http://openlibrary.org/search.json?title={title}&author={author}")
+        f"{ol_domain}/search.json?title={title}&author={author}")
 
     if response.status_code != 200:
         return {}
@@ -41,21 +42,26 @@ def enhance_row(row):
     row["Open Library Link"] = ""
     row["Cover Image"] = ""
 
-    if (row["ISBN"]):
-        row["Open Library Link"] = f"https://openlibrary.org/isbn/{row['ISBN']}"
-        row["Cover Image"] = f"https://covers.openlibrary.org/b/isbn/{row['ISBN']}-M.jpg?default=false"
-        return row
-
+    # Try to search for the book, preferentially use OLID/cover ID to avoid rate limit
     book = search_book(row["Title"], row["Author"])
     olid = get_olid(book)
     cover_id = get_cover_id(book)
-
+    isbn = row["ISBN"]
+    
     if olid:
-        row["Open Library Link"] = f"https://openlibrary.org/works/{olid}"
-        row["Cover Image"] = f"https://covers.openlibrary.org/b/olid/{olid}-M.jpg?default=false"
+        row["Open Library Link"] = f"{ol_domain}/works/{olid}"
+        row["Cover Image"] = f"{ol_covers_domain}/b/olid/{olid}-M.jpg?default=false"
 
+    # Use cover_id if available since this seems more reliable for images
     if cover_id:
-        row["Cover Image"] = f"https://covers.openlibrary.org/b/id/{cover_id}-M.jpg?default=false"
+        row["Cover Image"] = f"{ol_covers_domain}/b/id/{cover_id}-M.jpg?default=false"
+    
+    # Use ISBN if available as a fallback, but the images get rate limited
+    if not olid and isbn:
+        row["Open Library Link"] = f"{ol_domain}/isbn/{isbn}"
+
+    if (not olid and not cover_id) and isbn:    
+        row["Cover Image"] = f"{ol_covers_domain}/b/isbn/{isbn}-M.jpg?default=false"
 
     return row
 
