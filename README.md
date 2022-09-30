@@ -12,6 +12,6 @@ git clone https://github.com/farrelmahaztra/goodreads-export.git
 
 Move your Goodreads export CSV into the goodreads-export directory (it expects the filename `export.csv` but you can change this variable in the script) and run:
 
-```python
+```bash
 python3 main.py
 ```
